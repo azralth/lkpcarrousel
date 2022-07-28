@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    public: true
+
+  lkinteractive.lkpcarrousel.repository.carrousel:
+    class: LkInteractive\Back\Doctrine\Repository\CarrouselRepository
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - LkInteractive\Back\Doctrine\Entity\Carrousel

@@ -1,0 +1,26 @@
+{% block contact_form %}
+    {{ form_start(carrouselForm) }}
+    <div class="card">
+        <h3 class="card-header">
+            <i class="material-icons">mail_outline</i>
+            {{ 'Carrousel'|trans({}, 'Modules.Acbodoctrine.Admin') }}
+        </h3>
+        <div class="card-block row">
+            <div class="card-text">
+                {{ form_errors(carrouselForm) }}
+                {% block carrousel_form_rest %}
+                    {{ form_rest(carrouselForm) }}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('lkpcarrousel_carrousel_index') }}" class="btn btn-outline-secondary">
+                {{ 'Cancel'|trans({}, 'Admin.Actions') }}
+            </a>
+            <button class="btn btn-primary float-right">
+                {{ 'Save'|trans({}, 'Admin.Actions') }}
+            </button>
+        </div>
+    </div>
+    {{ form_end(carrouselForm) }}
+{% endblock %}

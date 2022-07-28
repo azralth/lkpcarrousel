@@ -1,0 +1,16 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% block content %}
+    {% block carrousels_list_panel %}
+        <div class="row">
+            <div class="col">
+                {% include '@PrestaShop/Admin/Common/Grid/grid_panel.html.twig' with {'grid': carrouselGrid} %}
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/acbo_doctrine/views/js/index.js') }}"></script>
+        <script src="{{ asset('themes/default/js/bundle/pagination.js') }}"></scr
+        ipt>
+{% endblock %}
