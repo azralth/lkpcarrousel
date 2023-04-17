@@ -90,16 +90,14 @@ class LkPCarrousels extends Module implements WidgetInterface
     {
         include dirname(__FILE__) . '/sql/install.php';
         Configuration::updateValue('LK_ENABLE_SLICK', false);
-        return parent::install() && $this->registerHook('header');
+        return parent::install() && $this->registerHook('displayHeader');
     }
 
     public function uninstall()
     {
         include dirname(__FILE__) . '/sql/uninstall.php';
         Configuration::deleteByName('LK_ENABLE_SLICK');
-        return parent::uninstall()
-            && $this->unregisterHook('header')
-            && $this->removeHook();
+        return parent::uninstall();
     }
 
     public function isUsingNewTranslationSystem()
@@ -197,18 +195,6 @@ class LkPCarrousels extends Module implements WidgetInterface
         return $this->renderForm();
     }
 
-
-    /**
-     * register hook
-     */
-    private function removeHook()
-    {
-        foreach (self::LK_HOOK_AVALAIBLE as $hook) {
-            $this->unregisterHook($hook);
-        }
-        return true;
-    }
-
     public function renderWidget($hookName = null, array $configuration = [])
     {
         $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
@@ -298,7 +284,7 @@ class LkPCarrousels extends Module implements WidgetInterface
         }
     }
 
-    public function hookHeader()
+    public function hookDisplayHeader()
     {
         if (Configuration::get('LK_ENABLE_SLICK')) {
             $this->context->controller->registerStylesheet('lk-carousel-slick', 'modules/' . $this->name . '/views/css/slick.css' , ['media' => 'all', 'priority' => 150]);
