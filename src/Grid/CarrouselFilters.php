@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace LkInteractive\Back\Doctrine\Grid;
-use LkInteractive\Back\Doctrine\Grid\CarrouselGridDefinitionFactory;
+namespace LkInteractive\Back\LkpCarrousel\Grid;
+use LkInteractive\Back\LkpCarrousel\Grid\CarrouselGridDefinitionFactory;
 use PrestaShop\PrestaShop\Core\Search\Filters;
 
 class CarrouselFilters extends Filters

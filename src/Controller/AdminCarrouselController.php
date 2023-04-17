@@ -1,24 +1,32 @@
 <?php
 declare(strict_types=1);
 
-namespace LkInteractive\Back\Doctrine\Controller;
+namespace LkInteractive\Back\LkpCarrousel\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
-use LkInteractive\Back\Doctrine\Entity\Carrousel;
-use LkInteractive\Back\Doctrine\Grid\CarrouselGridDefinitionFactory;
-use LkInteractive\Back\Doctrine\Grid\CarrouselFilters;
+use LkInteractive\Back\LkpCarrousel\Entity\Carrousel;
+use LkInteractive\Back\LkpCarrousel\Grid\CarrouselGridDefinitionFactory;
+use LkInteractive\Back\LkpCarrousel\Grid\CarrouselFilters;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Service\Grid\ResponseBuilder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
+use PrestaShopBundle\Security\Annotation\ModuleActivated;
 
+/**
+ * Class AdminCarrouselController.
+ *
+ * @ModuleActivated(moduleName="lkpcarrousels", redirectRoute="lkpcarrousel_carrousel_index")
+ */
 class AdminCarrouselController extends FrameworkBundleAdminController
 {
     /**
      * List carrousels
+     *
+     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message="Access denied.")
      *
      * @param CarrouselFilters $filters
      *
@@ -29,7 +37,7 @@ class AdminCarrouselController extends FrameworkBundleAdminController
         $carrouselGridFactory = $this->get('lkinteractive.lkpcarrousel.grid.factory.carrousel');
         $carrouselGrid = $carrouselGridFactory->getGrid($filters);
         return $this->render(
-            '@Modules/lkpcarrousel/views/templates/admin/index.html.twig',
+            '@Modules/lkpcarrousels/views/templates/admin/index.html.twig',
             [
                 'enableSidebar' => true,
                 'layoutTitle' => $this->trans('Carrousel', 'Modules.Lkpcarrousel.Admin'),
@@ -61,10 +69,7 @@ class AdminCarrouselController extends FrameworkBundleAdminController
     /**
      * Create carrousel
      *
-     * @AdminSecurity(
-     * "is_granted(['create'], request.get('_legacy_controller'))",
-     * message="You do not have permission to create Carrousels."
-     * )
+     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message="Access denied.")
      *
      * @param Request $request
      *
@@ -89,24 +94,20 @@ class AdminCarrouselController extends FrameworkBundleAdminController
             return $this->redirectToRoute('lkpcarrousel_carrousel_index');
         }
         return $this->render(
-            '@Modules/lkpcarrousel/views/templates/admin/create.html.twig',
+            '@Modules/lkpcarrousels/views/templates/admin/create.html.twig',
             [
-                'quoteForm' => $carrouselForm->createView(),
+                'layoutTitle' => $this->trans('Create carrousel', 'Modules.Lkpcarrousel.Admin'),
+                'carrouselForm' => $carrouselForm->createView(),
             ]
         );
     }
 
     /**
-     * Edit quote
-     *
-     * @AdminSecurity(
-     * "is_granted(['update'], request.get('_legacy_controller'))",
-     * message="You do not have permission to edit this."
-     * )
+     * Edit carrousel
+     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message="Access denied.")
      *
      * @param Request $request
-     * (c) 2014-2021 Frédéric BENOIST (info@fbenoist.com) Page 91/121
-     * @param int $quoteId
+     * @param int $carrouselId
      *
      * @return Response
      */
@@ -132,40 +133,39 @@ class AdminCarrouselController extends FrameworkBundleAdminController
             return $this->redirectToRoute('lkpcarrousel_carrousel_index');
         }
         return $this->render(
-            '@Modules/lkpcarrousel/views/templates/admin/edit.html.twig',
+            '@Modules/lkpcarrousels/views/templates/admin/edit.html.twig',
             [
                 'carrouselForm' => $carrouselForm->createView(),
+                'layoutTitle' => $this->trans('Carrousel edition', 'Modules.Lkpcarrousel.Admin'),
+                'help_link' => false,
             ]
         );
     }
 
     /**
-     * Delete quote
+     * Delete carrousel
+     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message="Access denied.")
      *
-     * @AdminSecurity(
-     * "is_granted(['delete'], request.get('_legacy_controller'))",
-     * message="You do not have permission to delete this."
-     * )
-     *
-     * @param int $quoteId
+     * @param int $carrouselId
      *
      * @return Response
      */
-    public function deleteAction($quoteId)
+    public function deleteAction($carrouselId)
     {
         $repository = $this->get(
             'lkinteractive.lkpcarrousel.repository.carrousel'
         );
         try {
-            $quote = $repository->findOneById($quoteId);
+            $carrousel = $repository->findOneById($carrouselId);
         } catch (EntityNotFoundException $e) {
-            $quote = null;
+            $carrousel = null;
         }
-        if (null !== $quote) {
+        if (null !== $carrousel) {
             /** @var EntityManagerInterface $em */
             $em = $this->get('doctrine.orm.entity_manager');
-            $em->remove($quote);
+            $em->remove($carrousel);
             $em->flush();
+            $repository->removeCarrouselCategories((int)$carrouselId);
             $this->addFlash(
                 'success',
                 $this->trans(
@@ -179,7 +179,7 @@ class AdminCarrouselController extends FrameworkBundleAdminController
                 $this->trans(
                     'Cannot find carrousel %carrousel%',
                     'Modules.Lkpcarrousel.Admin',
-                    ['%quote%' => $quoteId]
+                    ['%quote%' => $carrouselId]
                 )
             );
         }
@@ -188,11 +188,7 @@ class AdminCarrouselController extends FrameworkBundleAdminController
 
     /**
      * Delete bulk quotes
-     *
-     * @AdminSecurity(
-     * "is_granted(['delete'], request.get('_legacy_controller'))",
-     * message="You do not have permission to delete this."
-     * )
+     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message="Access denied.")
      *
      * @param Request $request
      *
@@ -200,20 +196,21 @@ class AdminCarrouselController extends FrameworkBundleAdminController
      */
     public function deleteBulkAction(Request $request)
     {
-        $quoteIds = $request->request->get('carrousel_bulk');
+        $carrouselIds = $request->request->get('carrousel_bulk');
         $repository = $this->get(
             'lkinteractive.lkpcarrousel.repository.carrousel'
         );
         try {
-            $quotes = $repository->findById($quoteIds);
+            $carrousels = $repository->findById($carrouselIds);
         } catch (EntityNotFoundException $e) {
-            $quotes = null;
+            $carrousels = null;
         }
-        if (!empty($quotes)) {
+        if (!empty($carrousels)) {
             /** @var EntityManagerInterface $em */
             $em = $this->get('doctrine.orm.entity_manager');
-            foreach ($quotes as $quote) {
-                $em->remove($quote);
+            foreach ($carrousels as $carrousel) {
+                $em->remove($carrousel);
+                $repository->removeCarrouselCategories($carrousel->getId());
             }
             $em->flush();
             $this->addFlash(
@@ -242,5 +239,46 @@ class AdminCarrouselController extends FrameworkBundleAdminController
                 'href' => $this->generateUrl('lkpcarrousel_carrousel_create'),
             ]
         ];
+    }
+
+    /**
+     * @param Request $request
+     * @param int $carrouselId
+     *
+     * @return Response
+     */
+    public function toggleAction(Request $request, int $carrouselId): Response
+    {
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+        $contentBlock = $entityManager
+            ->getRepository(Carrousel::class)
+            ->findOneBy(['id' => $carrouselId]);
+
+        if (empty($contentBlock)) {
+            return $this->json([
+                'status' => false,
+                'message' => sprintf('Content block %d doesn\'t exist', $carrouselId)
+            ]);
+        }
+
+        try {
+            $contentBlock->setActive(!$contentBlock->isActive());
+            $entityManager->flush();
+            $response = [
+                'status' => true,
+                'message' => $this->trans('The status has been successfully updated.', 'Admin.Notifications.Success'),
+            ];
+        } catch (\Exception $e) {
+            $response = [
+                'status' => false,
+                'message' => sprintf(
+                    'There was an error while updating the status of content block %d: %s',
+                    $carrouselId,
+                    $e->getMessage()
+                ),
+            ];
+        }
+
+        return $this->json($response);
     }
 }

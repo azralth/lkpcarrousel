@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LkInteractive\Back\Doctrine\Form;
+namespace LkInteractive\Back\LkpCarrousel\Form;
 
-use LkInteractive\Back\Doctrine\Repository\CarrouselRepository;
+use LkInteractive\Back\LkpCarrousel\Repository\CarrouselRepository;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataProvider\FormDataProviderInterface;
 
 class CarrouselFormDataProvider implements FormDataProviderInterface
 {
+
     /**
-     * @var QuoteRepository
+     * @var CarrouselRepository
      */
     private $repository;
 
@@ -21,11 +22,27 @@ class CarrouselFormDataProvider implements FormDataProviderInterface
         $this->repository = $repository;
     }
 
+
+
     public function getData($carrouselId)
     {
         $carrousel = $this->repository->findOneById($carrouselId);
-        foreach ($carrousel->getCarrouselLang() as $carrouselLang) {
+        $carrouselData['hook'] = $carrousel->getHook();
+        $carrouselData['order_by'] = $carrousel->getOrderBy();
+        $carrouselData['sort_order'] = $carrousel->getSortOrder();
+        $carrouselData['nb_product'] = $carrousel->getNbProduct();
+        $carrouselData['nb_product_to_show'] = $carrousel->getNbProductToShow();
+        $carrouselData['show_bullet'] = $carrousel->isShowBullet();
+        $carrouselData['show_arrrow'] = $carrousel->isShowArrow();
+        $carrouselData['active'] = $carrousel->isActive();
+
+        foreach ($carrousel->getCarrouselLangs() as $carrouselLang) {
             $carrouselData['title'][$carrouselLang->getLang()->getId()] = $carrouselLang->getTitle();
+            $carrouselData['btn_title'][$carrouselLang->getLang()->getId()] = $carrouselLang->getBtnTitle();
+        }
+        foreach ($this->repository->getCarrouselCategories($carrouselId) as $carrouselCategory) {
+            $categoryId = $carrouselCategory['id_category'];
+            $carrouselData['categories'][$categoryId] = $categoryId;
         }
         return $carrouselData;
     }
@@ -33,7 +50,9 @@ class CarrouselFormDataProvider implements FormDataProviderInterface
     public function getDefaultData()
     {
         return [
-            'content' => [],
+            'active' => 0,
+            'categories' => [2],
+            'show_arrrow' => 1,
         ];
     }
 }

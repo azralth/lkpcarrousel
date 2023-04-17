@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "LkInteractive\\Back\\Doctrine\\": "src/"
+      "LkInteractive\\Back\\LkpCarrousel\\": "src/"
     },
     "classmap": ["lkpcarrousels.php"],
     "exclude-from-classmap": []

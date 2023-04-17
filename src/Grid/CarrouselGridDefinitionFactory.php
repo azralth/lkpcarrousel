@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LkInteractive\Back\Doctrine\Grid;
+namespace LkInteractive\Back\LkpCarrousel\Grid;
 
 use PrestaShop\PrestaShop\Core\Grid\Action\Bulk\BulkActionCollection;
 use PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction;
@@ -13,6 +13,7 @@ use PrestaShop\PrestaShop\Core\Grid\Action\Type\SimpleGridAction;
 use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ActionColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\BulkActionColumn;
+use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ToggleColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
 use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
 use PrestaShop\PrestaShop\Core\Grid\Filter\Filter;
@@ -55,7 +56,8 @@ class CarrouselGridDefinitionFactory extends AbstractGridDefinitionFactory
                     'bulk_field' => 'id_carrousel',
                 ])
             )
-            ->add((new DataColumn('id_carrousel'))
+            ->add(
+                (new DataColumn('id_carrousel'))
                 ->setName($this->trans(
                     'ID',
                     [],
@@ -63,16 +65,40 @@ class CarrouselGridDefinitionFactory extends AbstractGridDefinitionFactory
                 ))
                 ->setOptions([
                     'field' => 'id_carrousel',
-                ]))
-            ->add((new DataColumn('title'))
+                ])
+            )
+            ->add(
+                (new DataColumn('title'))
                 ->setName($this->trans(
                     'Title',
                     [],
                     'Modules.Lkpcarrousel.Admin'
                 ))
                 ->setOptions([
-                    'field' => 'author',
-                ]))
+                    'field' => 'title',
+                ])
+            )
+            ->add(
+                (new DataColumn('hook'))
+                    ->setName($this->trans(
+                        'Display hook',
+                        [],
+                        'Modules.Lkpcarrousel.Admin'
+                    ))
+                    ->setOptions([
+                        'field' => 'hook',
+                    ])
+            )
+            ->add(
+                (new ToggleColumn('active'))
+                    ->setName($this->trans('Displayed', [], 'Admin.Global'))
+                    ->setOptions([
+                        'field' => 'active',
+                        'primary_field' => 'id_carrousel',
+                        'route' => 'lkpcarrousel_toggle_status',
+                        'route_param_name' => 'carrouselId',
+                    ])
+            )
             ->add((new ActionColumn('actions'))
                 ->setName($this->trans(
                     'Actions',
@@ -133,30 +159,18 @@ class CarrouselGridDefinitionFactory extends AbstractGridDefinitionFactory
                     ],
                 ])
                 ->setAssociatedColumn('id_carrousel'))
-            ->add((new Filter('author', TextType::class))
+            ->add((new Filter('title', TextType::class))
                 ->setTypeOptions([
                     'required' => false,
                     'attr' => [
                         'placeholder' => $this->trans(
-                            'author',
+                            'title',
                             [],
                             'Modules.Lkpcarrousel.Admin'
                         ),
                     ],
                 ])
-                ->setAssociatedColumn('author'))
-            ->add((new Filter('content', TextType::class))
-                ->setTypeOptions([
-                    'required' => false,
-                    'attr' => [
-                        'placeholder' => $this->trans(
-                            'Content',
-                            [],
-                            'Modules.Lkpcarrousel.Admin'
-                        ),
-                    ],
-                ])
-                ->setAssociatedColumn('content'))
+                ->setAssociatedColumn('title'))
             ->add((new Filter('actions', SearchAndResetType::class))
                 ->setTypeOptions([
                     'reset_route' => 'admin_common_reset_search_by_filter_id'

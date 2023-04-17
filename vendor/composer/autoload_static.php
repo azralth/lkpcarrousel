@@ -9,12 +9,12 @@ class ComposerStaticInit4508479fb40a89252524f3b4bd070dec
     public static $prefixLengthsPsr4 = array (
         'L' => 
         array (
-            'LkInteractive\\Back\\Doctrine\\' => 28,
+            'LkInteractive\\Back\\LkpCarrousel\\' => 32,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'LkInteractive\\Back\\Doctrine\\' => 
+        'LkInteractive\\Back\\LkpCarrousel\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -22,16 +22,17 @@ class ComposerStaticInit4508479fb40a89252524f3b4bd070dec
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'LkInteractive\\Back\\Doctrine\\Controller\\AdminCarrouselController' => __DIR__ . '/../..' . '/src/Controller/AdminCarrouselController.php',
-        'LkInteractive\\Back\\Doctrine\\Entity\\Carrousel' => __DIR__ . '/../..' . '/src/Entity/Carrousel.php',
-        'LkInteractive\\Back\\Doctrine\\Entity\\CarrouselLang' => __DIR__ . '/../..' . '/src/Entity/CarrouselLang.php',
-        'LkInteractive\\Back\\Doctrine\\Form\\CarrouselFormDataHandler' => __DIR__ . '/../..' . '/src/Form/CarrouselFormDataHandler.php',
-        'LkInteractive\\Back\\Doctrine\\Form\\CarrouselFormDataProvider' => __DIR__ . '/../..' . '/src/Form/CarrouselFormDataProvider.php',
-        'LkInteractive\\Back\\Doctrine\\Form\\CarrouselType' => __DIR__ . '/../..' . '/src/Form/CarrouselType.php',
-        'LkInteractive\\Back\\Doctrine\\Grid\\CarrouselFilters' => __DIR__ . '/../..' . '/src/Grid/CarrouselFilters.php',
-        'LkInteractive\\Back\\Doctrine\\Grid\\CarrouselGridDefinitionFactory' => __DIR__ . '/../..' . '/src/Grid/CarrouselGridDefinitionFactory.php',
-        'LkInteractive\\Back\\Doctrine\\Grid\\CarrouselQueryBuilder' => __DIR__ . '/../..' . '/src/Grid/CarrouselQueryBuilder.php',
-        'LkInteractive\\Back\\Doctrine\\Repository\\CarrouselRepository' => __DIR__ . '/../..' . '/src/Repository/CarrouselRepository.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Controller\\AdminCarrouselController' => __DIR__ . '/../..' . '/src/Controller/AdminCarrouselController.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Entity\\Carrousel' => __DIR__ . '/../..' . '/src/Entity/Carrousel.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Entity\\CarrouselCategory' => __DIR__ . '/../..' . '/src/Entity/CarrouselCategory.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Entity\\CarrouselLang' => __DIR__ . '/../..' . '/src/Entity/CarrouselLang.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Form\\CarrouselFormDataHandler' => __DIR__ . '/../..' . '/src/Form/CarrouselFormDataHandler.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Form\\CarrouselFormDataProvider' => __DIR__ . '/../..' . '/src/Form/CarrouselFormDataProvider.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Form\\CarrouselType' => __DIR__ . '/../..' . '/src/Form/CarrouselType.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Grid\\CarrouselFilters' => __DIR__ . '/../..' . '/src/Grid/CarrouselFilters.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Grid\\CarrouselGridDefinitionFactory' => __DIR__ . '/../..' . '/src/Grid/CarrouselGridDefinitionFactory.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Grid\\CarrouselQueryBuilder' => __DIR__ . '/../..' . '/src/Grid/CarrouselQueryBuilder.php',
+        'LkInteractive\\Back\\LkpCarrousel\\Repository\\CarrouselRepository' => __DIR__ . '/../..' . '/src/Repository/CarrouselRepository.php',
         'LkPCarrousels' => __DIR__ . '/../..' . '/lkpcarrousels.php',
     );
 

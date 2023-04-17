@@ -2,7 +2,7 @@ lkpcarrousel_carrousel_index:
   path: /lk-interactive/carrousel
   methods: [ GET ]
   defaults:
-    _controller: 'LkInteractive\Back\Doctrine\Controller\AdminCarrouselController::indexAction'
+    _controller: 'LkInteractive\Back\LkpCarrousel\Controller\AdminCarrouselController::indexAction'
     _legacy_controller: 'AdminCarrouselControllerLegacyClass'
     _legacy_link: 'AdminCarrouselControllerLegacyClass'
     
@@ -10,7 +10,7 @@ lkpcarrousel_carrousel_search:
   path: /lk-interactive/carrousel
   methods: [ POST ]
   defaults:
-    _controller: 'LkInteractive\Back\Doctrine\Controller\AdminCarrouselController::searchAction'
+    _controller: 'LkInteractive\Back\LkpCarrousel\Controller\AdminCarrouselController::searchAction'
     _legacy_controller: 'AdminCarrouselControllerLegacyClass'
     _legacy_link: 'AdminCarrouselControllerLegacyClass'
     
@@ -18,34 +18,44 @@ lkpcarrousel_carrousel_create:
   path: /lk-interactive/carrousel/new
   methods: [ GET, POST ]
   defaults:
-    _controller: 'LkInteractive\Back\Doctrine\Controller\AdminCarrouselController::createAction'
+    _controller: 'LkInteractive\Back\LkpCarrousel\Controller\AdminCarrouselController::createAction'
     _legacy_controller: 'AdminCarrouselControllerLegacyClass'
     _legacy_link: 'AdminCarrouselControllerLegacyClass'
 
 lkpcarrousel_carrousel_edit:
-  path: /lk-interactive/carrousel/[carrouselId]/edit
+  path: /lk-interactive/carrousel/{carrouselId}/edit
   methods: [ GET, POST ]
   defaults:
-    _controller: 'LkInteractive\Back\Doctrine\Controller\AdminCarrouselController::editAction'
+    _controller: 'LkInteractive\Back\LkpCarrousel\Controller\AdminCarrouselController::editAction'
     _legacy_controller: 'AdminCarrouselControllerLegacyClass'
     _legacy_link: 'AdminCarrouselControllerLegacyClass'
   requirements:
-    quoteId: \d+
+    carrouselId: \d+
 
 lkpcarrousel_carrousel_delete:
-  path: /lk-interactive/carrousel/[carrouselId]/delete
+  path: /lk-interactive/carrousel/{carrouselId}/delete
   methods: [ DELETE ]
   defaults:
-    _controller: 'LkInteractive\Back\Doctrine\Controller\AdminCarrouselController::deleteAction'
+    _controller: 'LkInteractive\Back\LkpCarrousel\Controller\AdminCarrouselController::deleteAction'
     _legacy_controller: 'AdminCarrouselControllerLegacyClass'
     _legacy_link: 'AdminCarrouselControllerLegacyClass'
   requirements:
-    quoteId: \d+
+    carrouselId: \d+
 
 lkpcarrousel_carrousel_bulk_delete:
   path: /lk-interactive/carrousel/bulkDelete
   methods: [ POST ]
   defaults:
-    _controller: 'LkInteractive\Back\Doctrine\Controller\AdminCarrouselController::deleteBulkAction'
+    _controller: 'LkInteractive\Back\LkpCarrousel\Controller\AdminCarrouselController::deleteBulkAction'
     _legacy_controller: 'AdminCarrouselControllerLegacyClass'
     _legacy_link: 'AdminCarrouselControllerLegacyClass'
+
+lkpcarrousel_toggle_status:
+  path: /lk-interactive/carrousel/{carrouselId}/toggle
+  methods: [ POST ]
+  defaults:
+    _controller: 'LkInteractive\Back\LkpCarrousel\Controller\AdminCarrouselController::toggleAction'
+    _legacy_controller: 'AdminCarrouselControllerLegacyClass'
+    _legacy_link: 'AdminCarrouselControllerLegacyClass'
+  requirements:
+    carrouselId: \d+

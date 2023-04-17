@@ -1,4 +1,6 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% trans_default_domain "Admin.Design.Feature" %}
+
 {% block content %}
     {% block carrousels_list_panel %}
         <div class="row">
@@ -10,7 +12,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('../modules/acbo_doctrine/views/js/index.js') }}"></script>
-        <script src="{{ asset('themes/default/js/bundle/pagination.js') }}"></scr
-        ipt>
+    <script src="{{ asset('themes/default/js/bundle/pagination.js') }}"></script>
+    <script src="{{ asset('../modules/lkpcarrousels/views/js/index.js') }}"></script>
+    <script src="{{ asset('../modules/lkpcarrousels/views/js/form.js') }}"></script>
 {% endblock %}

@@ -1,13 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LkInteractive\Back\Doctrine\Entity;
+namespace LkInteractive\Back\LkpCarrousel\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="lk_carrousel")
- * @ORM\Entity(repositoryClass="LkInteractive\Back\Doctrine\Repository\CarrouselRepository")
+ * @ORM\Table(name=LkInteractive\Back\LkpCarrousel\Repository\CarrouselRepository::TABLE_NAME_WITH_PREFIX)
+ * @ORM\Entity(repositoryClass="LkInteractive\Back\LkpCarrousel\Repository\CarrouselRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Carrousel
@@ -22,33 +24,38 @@ class Carrousel
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="LkInteractive\Entity\CarrouselLang", cascade("persist", "remove")
+     * @ORM\OneToMany(targetEntity="LkInteractive\Back\LkpCarrousel\Entity\CarrouselLang", cascade={"persist", "remove"}, mappedBy="carrousel")
      */
-    private $carrouselLang;
+    private $carrouselLangs;
 
     /**
      * @var int
      *
-     * @ORM\Id
      * @ORM\Column(name="position", type="integer")
      */
     private $position;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Id
-     * @ORM\Column(name="active", type="integer")
+     * @ORM\Column(name="active", type="boolean")
      */
     private $active;
 
     /**
      * @var int
      *
-     * @ORM\Id
      * @ORM\Column(name="nb_product", type="integer")
      */
     private $nbProduct;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nb_product_to_show", type="integer")
+     */
+    private $nbProductToShow;
+
 
     /**
      * @var bool
@@ -67,17 +74,26 @@ class Carrousel
     /**
      * @var string
      *
-     * @ORM\Column(name="assoc_object", type="string" columnDefinition="ENUM('category', 'manufacturer')")
+     *
+     * @ORM\Column(name="hook", type="string", length=255)
      */
-    private $object;
+    private $hook;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Id
-     * @ORM\Column(name="id_object", type="integer")
+     *
+     * @ORM\Column(name="order_by", type="string", length=255)
      */
-    private $idObject;
+    private $orderBy;
+
+    /**
+     * @var string
+     *
+     *
+     * @ORM\Column(name="sort_order", type="string", length=255)
+     */
+    private $sortOrder;
 
     /**
      * @var \DateTime
@@ -92,6 +108,45 @@ class Carrousel
      * @ORM\Column(name="date_upd", type="datetime")
      */
     private $dateUpd;
+
+    public function __construct()
+    {
+        $this->carrouselLangs = new ArrayCollection();
+        $this->carrouselCategories = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCarrouselLangs()
+    {
+        return $this->carrouselLangs;
+    }
+
+    /**
+     * @param int $langId
+     * @return CarrouselLang|null
+     */
+    public function getCarrouselLangByLangId(int $langId)
+    {
+        foreach ($this->carrouselLangs as $carrouselLang) {
+            if ($langId === $carrouselLang->getLang()->getId()) {
+                return $carrouselLang;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param CarrouselLang $carrouselLang
+     * @return $this
+     */
+    public function addCarrouselLang(CarrouselLang $carrouselLang)
+    {
+        $carrouselLang->setCarrousel($this);
+        $this->carrouselLangs->add($carrouselLang);
+        return $this;
+    }
 
     /**
      * @return int
@@ -130,18 +185,18 @@ class Carrousel
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getActive(): int
+    public function isActive(): bool
     {
         return $this->active;
     }
 
     /**
-     * @param int $active
+     * @param bool $active
      * @return Carrousel
      */
-    public function setActive(int $active): Carrousel
+    public function setActive(bool $active): Carrousel
     {
         $this->active = $active;
         return $this;
@@ -202,45 +257,81 @@ class Carrousel
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getObject(): string
+    public function getNbProductToShow(): int
     {
-        return $this->object;
+        return $this->nbProductToShow;
     }
 
     /**
-     * @param string $object
+     * @param int $nbProductToShow
      * @return Carrousel
      */
-    public function setObject(string $object): Carrousel
+    public function setNbProductToShow(int $nbProductToShow): Carrousel
     {
-        $this->object = $object;
+        $this->nbProductToShow = $nbProductToShow;
         return $this;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getIdObject(): int
+    public function getHook(): string
     {
-        return $this->idObject;
+        return $this->hook;
     }
 
     /**
-     * @param int $idObject
+     * @param string $hook
      * @return Carrousel
      */
-    public function setIdObject(int $idObject): Carrousel
+    public function setHook(string $hook): Carrousel
     {
-        $this->idObject = $idObject;
+        $this->hook = $hook;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderBy(): string
+    {
+        return $this->orderBy;
+    }
+
+    /**
+     * @param string $orderBy
+     * @return Carrousel
+     */
+    public function setOrderBy(string $orderBy): Carrousel
+    {
+        $this->orderBy = $orderBy;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortOrder(): string
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * @param string $sortOrder
+     * @return Carrousel
+     */
+    public function setSortOrder(string $sortOrder): Carrousel
+    {
+        $this->sortOrder = $sortOrder;
         return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getDateAdd(): \DateTime
+    public function getDateAdd()
     {
         return $this->dateAdd;
     }
@@ -274,7 +365,35 @@ class Carrousel
     }
 
     /**
-     * Now we tell doctrine that before we persist or update we call the upda
+     * @return string
+     */
+    public function getCarrouselTitle()
+    {
+        if ($this->carrouselLangs->count() <= 0) {
+            return '';
+        }
+
+        $carrouselLang = $this->carrouselLangs->first();
+
+        return $carrouselLang->getTitle();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCarrouselBtnTitle()
+    {
+        if ($this->carrouselLangs->count() <= 0) {
+            return '';
+        }
+
+        $carrouselLang = $this->carrouselLangs->first();
+
+        return $carrouselLang->getBtnTitle();
+    }
+
+    /**
+     * Now we tell doctrine that before we persist or update we call the update
      *
      * @ORM\PrePersist
      * @ORM\PreUpdate

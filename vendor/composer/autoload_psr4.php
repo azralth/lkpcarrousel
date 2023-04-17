@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'LkInteractive\\Back\\Doctrine\\' => array($baseDir . '/src'),
+    'LkInteractive\\Back\\LkpCarrousel\\' => array($baseDir . '/src'),
 );

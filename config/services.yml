@@ -5,7 +5,7 @@ services:
 
   # Form services
   lkinteractive.lkpcarrousel.type.carrousel:
-    class: 'LkInteractive\Back\Doctrine\Form\CarrouselType'
+    class: 'LkInteractive\Back\LkpCarrousel\Form\CarrouselType'
     parent: 'form.type.translatable.aware'
     public: true
     arguments:
@@ -14,12 +14,12 @@ services:
       - { name: form.type }
 
   lkinteractive.lkpcarrousel.form.data_provider.carrousel:
-    class: 'LkInteractive\Back\Doctrine\Form\CarrouselFormDataProvider'
+    class: 'LkInteractive\Back\LkpCarrousel\Form\CarrouselFormDataProvider'
     arguments:
       - '@lkinteractive.lkpcarrousel.repository.carrousel'
 
   lkinteractive.lkpcarrousel.form.data_handler.carrousel:
-    class: 'LkInteractive\Back\Doctrine\Form\CarrouselFormDataHandler'
+    class: 'LkInteractive\Back\LkpCarrousel\Form\CarrouselFormDataHandler'
     arguments:
       - '@lkinteractive.lkpcarrousel.repository.carrousel'
       - '@prestashop.core.admin.lang.repository'
@@ -30,7 +30,7 @@ services:
     class: 'PrestaShop\PrestaShop\Core\Form\IdentifiableObject\Builder\FormBuilder'
     factory: 'prestashop.core.form.builder.form_builder_factory:create'
     arguments:
-      - 'LkInteractive\Back\Doctrine\Form\CarrouselType'
+      - 'LkInteractive\Back\LkpCarrousel\Form\CarrouselType'
       - '@lkinteractive.lkpcarrousel.form.data_provider.carrousel'
 
   lkinteractive.lkpcarrousel.form.handler.carrousel:
@@ -41,11 +41,11 @@ services:
 
   # Grid services
   lkinteractive.lkpcarrousel.grid.definition.factory.carrousel:
-    class: 'LkInteractive\Back\Doctrine\Grid\CarrouselGridDefinitionFactory'
+    class: 'LkInteractive\Back\LkpCarrousel\Grid\CarrouselGridDefinitionFactory'
     parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
 
   lkinteractive.lkpcarrousel.grid.query_builder.carrousel:
-    class: 'LkInteractive\Back\Doctrine\Grid\CarrouselQueryBuilder'
+    class: 'LkInteractive\Back\LkpCarrousel\Grid\CarrouselQueryBuilder'
     parent: 'prestashop.core.grid.abstract_query_builder'
     public: true
     arguments:

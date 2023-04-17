@@ -1,2 +1,2 @@
-import:
+imports:
   - { resource: ../common.yml}

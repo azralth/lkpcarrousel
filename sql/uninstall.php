@@ -15,6 +15,7 @@ $sql = array();
 // Delete customer validation table
 $sql[] = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "lk_carrousel`";
 $sql[] = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "lk_carrousel_lang`";
+$sql[] = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "lk_carrousel_category_association`";
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {
         return false;

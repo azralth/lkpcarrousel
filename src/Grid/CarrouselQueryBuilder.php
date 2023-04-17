@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LkInteractive\Back\Doctrine\Grid;
+namespace LkInteractive\Back\LkpCarrousel\Grid;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -45,7 +45,7 @@ class CarrouselQueryBuilder extends AbstractDoctrineQueryBuilder
     {
         $qb = $this->getQueryBuilder($searchCriteria->getFilters());
         $qb
-            ->select('c.id_carrousel, cl.title')
+            ->select('c.id_carrousel, c.position, c.hook, c.active, cl.title')
             ->groupBy('c.id_carrousel');
         $this->searchCriteriaApplicator
             ->applySorting($searchCriteria, $qb)
@@ -77,10 +77,10 @@ class CarrouselQueryBuilder extends AbstractDoctrineQueryBuilder
         ];
         $qb = $this->connection
             ->createQueryBuilder()
-            ->from($this->dbPrefix . 'carrousel', 'c')
+            ->from($this->dbPrefix . 'lk_carrousel', 'c')
             ->innerJoin(
                 'c',
-                $this->dbPrefix . 'carrousel_lang',
+                $this->dbPrefix . 'lk_carrousel_lang',
                 'cl',
                 'c.id_carrousel = cl.id_carrousel'
             )
